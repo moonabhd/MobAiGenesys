@@ -26,7 +26,7 @@ class BookmarkScreen extends StatelessWidget {
               ),
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
-                  final book = demoPopularBooks[index];
+                  final book = demoSavedBooks[index];
                   return Stack(
                     children: [
                       ProductCard(
@@ -37,31 +37,10 @@ class BookmarkScreen extends StatelessWidget {
                         priceAfetDiscount: book.priceAfterDiscount,
                         dicountpercent: book.discountPercent,
                         press: () {
-                          Navigator.pushNamed(context, productDetailsScreenRoute);
+                          Navigator.pushNamed(context, productDetailsScreenRoute,arguments: book);
                         },
                       ),
-                      Positioned(
-                        top: 8,
-                        right: 8,
-                        child: IconButton(
-                          icon: const Icon(Icons.edit, color: Colors.purple),
-                          onPressed: () {
-                            // Navigate to edit screen
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => EditBookmarkScreen(
-                                  book: book,
-                                  onSave: (updatedBook) {
-                                    // Update the bookmarked item
-                                    demoPopularBooks[index] = updatedBook;
-                                  },
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
+                     
                     ],
                   );
                 },

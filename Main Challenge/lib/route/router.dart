@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shop/entry_point.dart';
+import 'package:shop/models/product_model.dart';
 import 'package:shop/screens/auth/views/welcome.dart';
+import 'package:shop/screens/order/orders.dart';
 
 import 'screen_export.dart';
 
@@ -130,12 +132,13 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     //     builder: (context) => const SetupFaceIdScreen(),
     //   );
     case productDetailsScreenRoute:
-      return MaterialPageRoute(
-        builder: (context) {
-          bool isProductAvailable = settings.arguments as bool? ?? true;
-          return ProductDetailsScreen(isProductAvailable: isProductAvailable);
-        },
-      );
+  return MaterialPageRoute(
+    builder: (context) {
+      final BookModel product = settings.arguments as BookModel;
+      return ProductDetailsScreen(product: product);
+    },
+  );
+
     case productReviewsScreenRoute:
       return MaterialPageRoute(
         builder: (context) => const ProductReviewsScreen(),
@@ -201,8 +204,24 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     //     builder: (context) => const ChatScreen(),
     //   );
     case userInfoScreenRoute:
+    final profile = UserProfile(
+  name: 'Sepide Moqadasi',
+  firstName: 'Sepide',
+  email: 'Sepide@piqo.design',
+  phone: '+1-202-555-0162',
+  dateOfBirth: DateTime(1997, 10, 31),
+  gender: 'Female',
+  profileImage: 'assets/profile_image.jpg',
+);
+
+
       return MaterialPageRoute(
-        builder: (context) => const UserInfoScreen(),
+        builder: (context) =>  ProfileInfoScreen(
+  profile: profile,
+  onProfileUpdate: (updatedProfile) {
+    // Handle profile update
+  },
+)
       );
     // case currentPasswordScreenRoute:
     //   return MaterialPageRoute(

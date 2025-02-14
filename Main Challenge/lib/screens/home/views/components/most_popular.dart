@@ -17,19 +17,20 @@ class MostPopular extends StatelessWidget {
       children: [
         const SizedBox(height: defaultPadding / 2),
         const Padding(
-          padding:  EdgeInsets.all(defaultPadding),
-          child:  Center(
-  child: Text(
-    "Most Popular Books",
-    style: TextStyle(
-      fontSize: 20, // Increase font size
-      fontWeight: FontWeight.bold, // Make text bolder
-      color: Colors.white, // Text color
-    ),
-    textAlign: TextAlign.center, // Ensure text is centered
-  ),
-),
+        padding: const EdgeInsets.symmetric(vertical: 10), // Adds vertical padding
+        child: const Center(
+          child: Text(
+            "Most Popular Products",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 30, 
+              fontWeight: FontWeight.bold, // Make it bold
+              color: purpleColor, // Change text color
+              
+            ),
+          ),
         ),
+      ),    
         // While loading use 👇
         // SeconderyProductsSkelton(),
         SizedBox(
@@ -54,7 +55,7 @@ class MostPopular extends StatelessWidget {
                 dicountpercent: demoPopularBooks[index].discountPercent,
                 press: () {
                   Navigator.pushNamed(context, productDetailsScreenRoute,
-                      arguments: index.isEven);
+                      arguments: demoPopularBooks[index]);
                 },
               ),
             ),

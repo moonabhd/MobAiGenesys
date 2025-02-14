@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shop/components/buy_full_ui_kit.dart';
+import 'package:shop/constants.dart';
 
 
 
@@ -60,7 +61,7 @@ class AddressScreen extends StatelessWidget {
         );
       },
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.purple,
+        backgroundColor: primaryColor,
         minimumSize: const Size(double.infinity, 50),
       ),
       child: const Text(
@@ -171,7 +172,7 @@ class AddNewAddressScreen extends StatelessWidget {
                 Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.purple,
+                backgroundColor: primaryColor,
                 minimumSize: const Size(double.infinity, 50),
               ),
               child: const Text(

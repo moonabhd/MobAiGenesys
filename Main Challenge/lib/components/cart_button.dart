@@ -14,6 +14,7 @@ class CartButton extends StatelessWidget {
   final double price;
   final String title, subTitle;
   final VoidCallback press;
+  final int num=1;
 
   @override
   Widget build(BuildContext context) {

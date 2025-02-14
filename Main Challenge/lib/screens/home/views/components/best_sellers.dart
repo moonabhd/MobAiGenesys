@@ -17,23 +17,24 @@ class BestSellers extends StatelessWidget {
       children: [
         const SizedBox(height: defaultPadding / 2),
         const Padding(
-           padding:  EdgeInsets.all(defaultPadding),
-          child:  Center(
-  child: Text(
-    "Best Selling Books",
-    style: TextStyle(
-      fontSize: 20, // Increase font size
-      fontWeight: FontWeight.bold, // Make text bolder
-      color: Colors.white, // Text color
-    ),
-    textAlign: TextAlign.center, // Ensure text is centered
-  ),
-),
+        padding: const EdgeInsets.symmetric(vertical: 10), // Adds vertical padding
+        child: const Center(
+          child: Text(
+            "Best Selling Products",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 30, 
+              fontWeight: FontWeight.bold, // Make it bold
+              color: purpleColor, // Change text color
+              
+            ),
+          ),
         ),
+      ),    
         // While loading use 👇
         // const ProductsSkelton(),
         SizedBox(
-          height: 220,
+          height: 300,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             // Find demoBestSellersBooks on models/ProductModel.dart
@@ -55,7 +56,7 @@ class BestSellers extends StatelessWidget {
                 dicountpercent: demoBestSellersBooks[index].discountPercent,
                 press: () {
                   Navigator.pushNamed(context, productDetailsScreenRoute,
-                      arguments: index.isEven);
+                      arguments: demoBestSellersBooks[index]);
                 },
               ),
             ),

@@ -45,22 +45,10 @@ class ProfileScreen extends StatelessWidget {
           ),
           
           ProfileMenuListTile(
-            text: "Wishlist",
-            svgSrc: "assets/icons/Wishlist.svg",
-            press: () {},
-          ),
-          ProfileMenuListTile(
             text: "Addresses",
             svgSrc: "assets/icons/Address.svg",
             press: () {
               Navigator.pushNamed(context, addressesScreenRoute);
-            },
-          ),
-          ProfileMenuListTile(
-            text: "Payment",
-            svgSrc: "assets/icons/card.svg",
-            press: () {
-              Navigator.pushNamed(context, emptyPaymentScreenRoute);
             },
           ),
           ProfileMenuListTile(

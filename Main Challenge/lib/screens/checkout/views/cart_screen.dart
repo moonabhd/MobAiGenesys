@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shop/constants.dart';
-import 'package:shop/models/product_model.dart'; // Ensure this import points to your constants file
+import 'package:shop/models/product_model.dart';
+import 'package:shop/route/route_constants.dart'; // Ensure this import points to your constants file
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Shoplon Cart',
       theme: ThemeData(
-        primarySwatch: Colors.purple,
+        primarySwatch: Colors.brown,
       ),
       home: const CartScreen(),
     );
@@ -35,9 +36,7 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Review your order'),
-      ),
+     
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -75,6 +74,7 @@ class _CartScreenState extends State<CartScreen> {
   Widget _buildCartItem(BookModel product) {
     return Card(
       child: ListTile(
+        onTap: (){Navigator.pushNamed(context, productDetailsScreenRoute,arguments: product);},
         leading: Image.network(
           product.image,
           width: 50,
@@ -155,22 +155,8 @@ class PaymentMethodScreen extends StatelessWidget {
                 ),
               );
             }),
-            _buildPaymentOption('Pay with cash', Icons.money, () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const CashPaymentScreen(),
-                ),
-              );
-            }),
-            _buildPaymentOption('Use Credit', Icons.account_balance_wallet, () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const CreditPaymentScreen(),
-                ),
-              );
-            }),
+           
+           
           ],
         ),
       ),

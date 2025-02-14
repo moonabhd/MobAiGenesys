@@ -22,6 +22,7 @@ class ProductBuyNowScreen extends StatefulWidget {
 }
 
 class _ProductBuyNowScreenState extends State<ProductBuyNowScreen> {
+  static int num=2;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,9 +84,9 @@ class _ProductBuyNowScreenState extends State<ProductBuyNowScreen> {
                           ),
                         ),
                         ProductQuantity(
-                          numOfItem: 2,
-                          onIncrement: () {},
-                          onDecrement: () {},
+                          numOfItem: num,
+                          onIncrement: () {num=num+1;},
+                          onDecrement: () {num=num==1?1:num-1;},
                         ),
                       ],
                     ),
