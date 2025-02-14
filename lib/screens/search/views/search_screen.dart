@@ -159,7 +159,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 onPressed: () {},
                 child: const Text(
                   'See All',
-                  style: TextStyle(color: Colors.purple),
+                  style: TextStyle(color: Color(0xFF211613)),
                 ),
               ),
             ],
@@ -271,7 +271,7 @@ class _FilterScreenState extends State<FilterScreen> {
             },
             child: const Text(
               'Clear All',
-              style: TextStyle(color: Colors.purple),
+              style: TextStyle(color: Color(0xFF211613)),
             ),
           ),
         ],
@@ -294,7 +294,7 @@ class _FilterScreenState extends State<FilterScreen> {
                       Navigator.pop(context, filters); // Return filters
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.purple,
+                      backgroundColor:const Color(0xFF211613),
                     ),
                     child: const Text('Apply Filters'),
                   ),
@@ -355,11 +355,11 @@ class _SizeFilterScreenState extends State<SizeFilterScreen> {
   String? selectedSize;
 
   final List<Map<String, dynamic>> sizes = [
-    {'author': 'XS', 'count': 1},
-    {'author': 'S', 'count': 29},
-    {'author': 'M', 'count': 33},
-    {'author': 'L', 'count': 32},
-    {'author': 'XL', 'count': 27},
+    {'author': 'Imen', 'count': 1},
+    {'author': 'Zineb', 'count': 29},
+    {'author': 'Maroua', 'count': 33},
+    {'author': 'Hadj Melab', 'count': 32},
+    {'author': 'Linus', 'count': 27},
   ];
 
   @override
@@ -385,7 +385,7 @@ class _SizeFilterScreenState extends State<SizeFilterScreen> {
             },
             child: const Text(
               'Clear All',
-              style: TextStyle(color: Colors.purple),
+              style: TextStyle(color: Color(0xFF211613)),
             ),
           ),
         ],
@@ -420,7 +420,7 @@ class _SizeFilterScreenState extends State<SizeFilterScreen> {
                   Navigator.pop(context, selectedSize); // Return selected size
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.purple,
+                  backgroundColor: const Color(0xFF211613),
                 ),
                 child: const Text('Done'),
               ),

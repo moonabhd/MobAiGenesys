@@ -16,12 +16,19 @@ class BestSellers extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: defaultPadding / 2),
-        Padding(
-          padding: const EdgeInsets.all(defaultPadding),
-          child: Text(
-            "Best sellers",
-            style: Theme.of(context).textTheme.titleSmall,
-          ),
+        const Padding(
+           padding:  EdgeInsets.all(defaultPadding),
+          child:  Center(
+  child: Text(
+    "Best Selling Books",
+    style: TextStyle(
+      fontSize: 20, // Increase font size
+      fontWeight: FontWeight.bold, // Make text bolder
+      color: Colors.white, // Text color
+    ),
+    textAlign: TextAlign.center, // Ensure text is centered
+  ),
+),
         ),
         // While loading use 👇
         // const ProductsSkelton(),
@@ -53,7 +60,8 @@ class BestSellers extends StatelessWidget {
               ),
             ),
           ),
-        )
+        ),
+       
       ],
     );
   }

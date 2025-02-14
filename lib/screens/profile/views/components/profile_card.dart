@@ -54,7 +54,6 @@ class ProfileCard extends StatelessWidget {
               child: Text(
                 proLableText,
                 style: const TextStyle(
-                  fontFamily: grandisExtendedFont,
                   fontSize: 10,
                   fontWeight: FontWeight.w500,
                   color: Colors.white,

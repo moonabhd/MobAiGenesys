@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../constants.dart';
 
@@ -35,6 +36,7 @@ class BlurContainer extends StatelessWidget {
                 fontSize: fontSize,
                 color: Colors.white,
                 fontWeight: FontWeight.w500,
+                
               ),
             ),
           ),

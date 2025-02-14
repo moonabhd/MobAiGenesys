@@ -57,7 +57,6 @@ class _BannerMWithCounterState extends State<BannerMWithCounter> {
               widget.text,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontFamily: grandisExtendedFont,
                 fontSize: 24,
                 fontWeight: FontWeight.w500,
                 color: Colors.white,

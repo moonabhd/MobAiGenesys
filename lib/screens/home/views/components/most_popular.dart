@@ -16,13 +16,19 @@ class MostPopular extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: defaultPadding / 2),
-        Padding(
-          padding: const EdgeInsets.all(defaultPadding),
-          child: Text(
-            "Recommondations",
-            style: Theme.of(context).textTheme.titleLarge,
-            selectionColor: Colors.white,
-          ),
+        const Padding(
+          padding:  EdgeInsets.all(defaultPadding),
+          child:  Center(
+  child: Text(
+    "Most Popular Books",
+    style: TextStyle(
+      fontSize: 20, // Increase font size
+      fontWeight: FontWeight.bold, // Make text bolder
+      color: Colors.white, // Text color
+    ),
+    textAlign: TextAlign.center, // Ensure text is centered
+  ),
+),
         ),
         // While loading use 👇
         // SeconderyProductsSkelton(),
@@ -54,7 +60,9 @@ class MostPopular extends StatelessWidget {
             ),
           ),
         )
+        
       ],
+    
     );
   }
 }

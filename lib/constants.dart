@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:google_fonts/google_fonts.dart'; // Import the package
 
 // Just for demo
 const productDemoImg1 = "https://www.baylanguagebooks.co.uk/cdn/shop/products/9789600122855_800x.jpg?v=1733147836";
@@ -11,24 +12,26 @@ const productDemoImg6 = "https://www.baylanguagebooks.co.uk/cdn/shop/products/97
 
 // End For demo
 
-const grandisExtendedFont = "Grandis Extended";
+class AppTypography {
+  static final textTheme = GoogleFonts.latoTextTheme();
+}
 
 // On color 80, 60.... those means opacity
 
-const Color primaryColor = Color(0xFF7B61FF);
+const Color primaryColor = Color.fromRGBO(74, 43,41, 1);
 
 const MaterialColor primaryMaterialColor =
-    MaterialColor(0xFF9581FF, <int, Color>{
-  50: Color(0xFFEFECFF),
-  100: Color(0xFFD7D0FF),
-  200: Color(0xFFBDB0FF),
-  300: Color(0xFFA390FF),
-  400: Color(0xFF8F79FF),
-  500: Color(0xFF7B61FF),
-  600: Color(0xF07359FF),
-  700: Color(0xF0684FFF),
-  800: Color(0xFF5E45FF),
-  900: Color(0xFF6C56DD),
+    MaterialColor(0xFF211613, <int, Color>{
+  50: Color.fromRGBO(239, 236,235, 1),
+  100: Color.fromRGBO(231, 226,225, 1),
+  200: Color.fromRGBO(205, 196,193, 1),
+  300: Color.fromRGBO(93, 64,55, 1),
+  400: Color.fromRGBO(84, 58,50, 1),
+  500: Color.fromRGBO(74, 51,44, 1),
+  600: Color.fromRGBO(70, 48,41, 1),
+  700: Color.fromRGBO(56, 38,33, 1),
+  800: Color.fromRGBO(42, 29,25, 1),
+  900: Color.fromRGBO(33, 22,19, 1),
 });
 
 const Color blackColor = Color(0xFF16161E);
@@ -57,7 +60,7 @@ const Color darkGreyColor = Color(0xFF1C1C25);
 // const Color greyColor10 = Color(0xFFF8F8F9);
 // const Color greyColor5 = Color(0xFFFBFBFC);
 
-const Color purpleColor = Color(0xFF7B61FF);
+const Color purpleColor = Color(0xFF211613);
 const Color successColor = Color(0xFF2ED573);
 const Color warningColor = Color(0xFFFFBE21);
 const Color errorColor = Color(0xFFEA5B5B);

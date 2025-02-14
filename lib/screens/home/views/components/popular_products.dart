@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shop/components/product/product_card.dart';
 import 'package:shop/models/product_model.dart';
 import 'package:shop/route/screen_export.dart';
@@ -31,6 +32,21 @@ class PopularProducts extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: defaultPadding / 2),
+       const Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10), // Adds vertical padding
+        child: const Center(
+          child: Text(
+            "Popular Products",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 30, 
+              fontWeight: FontWeight.bold, // Make it bold
+              color: purpleColor, // Change text color
+              fontFamily: GoogleFonts.latoTextTheme()
+            ),
+          ),
+        ),
+      ),     
         SizedBox(
           height: 300,
           child: filteredBooks.isEmpty

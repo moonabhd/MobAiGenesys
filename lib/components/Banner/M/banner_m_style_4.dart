@@ -56,7 +56,6 @@ class BannerMStyle4 extends StatelessWidget {
                     Text(
                       title.toUpperCase(),
                       style: const TextStyle(
-                        fontFamily: grandisExtendedFont,
                         fontSize: 28,
                         fontWeight: FontWeight.w900,
                         color: Colors.white,
@@ -67,7 +66,6 @@ class BannerMStyle4 extends StatelessWidget {
                     Text(
                       "UP TO $discountParcent% OFF",
                       style: const TextStyle(
-                        fontFamily: grandisExtendedFont,
                         color: Colors.white,
                         fontSize: 12,
                         fontWeight: FontWeight.bold,

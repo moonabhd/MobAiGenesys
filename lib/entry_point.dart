@@ -14,8 +14,7 @@ class EntryPoint extends StatefulWidget {
 class _EntryPointState extends State<EntryPoint> {
   final List _pages = const [
     HomeScreen(),
-    DiscoverScreen(),
-    BookmarkScreen(),
+     BookmarkScreen(),
     // EmptyCartScreen(), // if Cart is empty
     CartScreen(),
     ProfileScreen(),
@@ -46,7 +45,7 @@ class _EntryPointState extends State<EntryPoint> {
         leadingWidth: 0,
         centerTitle: false,
         title: SvgPicture.asset(
-          "assets/logo/Shoplon.svg",
+          "assets/Illustration/BookLogo.png",
           colorFilter: ColorFilter.mode(
               Theme.of(context).iconTheme.color!, BlendMode.srcIn),
           height: 20,
@@ -109,37 +108,31 @@ class _EntryPointState extends State<EntryPoint> {
               ? Colors.white
               : const Color(0xFF101015),
           type: BottomNavigationBarType.fixed,
-          // selectedLabelStyle: TextStyle(color: primaryColor),
+          // selectedLabelStyle: TextStyle(color: const Color.fromRGBO(74, 43,41, 1)),
           selectedFontSize: 12,
-          selectedItemColor: primaryColor,
+          selectedItemColor: const Color.fromRGBO(74, 43,41, 1),
           unselectedItemColor: Colors.transparent,
           items: [
             BottomNavigationBarItem(
-              icon: svgIcon("assets/icons/Shop.svg"),
-              activeIcon: svgIcon("assets/icons/Shop.svg", color: primaryColor),
-              label: "Shop",
-            ),
-            BottomNavigationBarItem(
               icon: svgIcon("assets/icons/Category.svg"),
-              activeIcon:
-                  svgIcon("assets/icons/Category.svg", color: primaryColor),
-              label: "Discover",
+              activeIcon: svgIcon("assets/icons/Category.svg", color: const Color.fromRGBO(74, 43,41, 1)),
+              label: "Home",
             ),
             BottomNavigationBarItem(
               icon: svgIcon("assets/icons/Bookmark.svg"),
               activeIcon:
-                  svgIcon("assets/icons/Bookmark.svg", color: primaryColor),
+                  svgIcon("assets/icons/Bookmark.svg", color: const Color.fromRGBO(74, 43,41, 1)),
               label: "Bookmark",
             ),
             BottomNavigationBarItem(
               icon: svgIcon("assets/icons/Bag.svg"),
-              activeIcon: svgIcon("assets/icons/Bag.svg", color: primaryColor),
+              activeIcon: svgIcon("assets/icons/Bag.svg", color: const Color.fromRGBO(74, 43,41, 1)),
               label: "Cart",
             ),
             BottomNavigationBarItem(
               icon: svgIcon("assets/icons/Profile.svg"),
               activeIcon:
-                  svgIcon("assets/icons/Profile.svg", color: primaryColor),
+                  svgIcon("assets/icons/Profile.svg", color: const Color.fromRGBO(74, 43,41, 1)),
               label: "Profile",
             ),
           ],

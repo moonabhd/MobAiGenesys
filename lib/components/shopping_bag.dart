@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../constants.dart';
 
@@ -36,7 +37,6 @@ class ShoppingBag extends StatelessWidget {
               child: Text(
                 numOfItem!.toString(),
                 style: TextStyle(
-                  fontFamily: grandisExtendedFont,
                   fontSize: 10,
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).brightness == Brightness.dark
