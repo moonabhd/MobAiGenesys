@@ -13,7 +13,10 @@ version: 1.0.0+1
 environment:
   sdk: ">=2.12.0-dev.68.0 <3.0.0"
 
+
 dependencies:
+  http: ^1.0.0 # Check for the latest version
+
   flutter:
     sdk: flutter
 
@@ -49,7 +52,16 @@ flutter:
       - assets/images/striker.png
       - assets/images/wings.png
       - assets/images/field.png
-      - assets/images/player 1.png
+      - assets/images/player.png
+      - assets/images/logo.png
+      - assets/images/staduim.jpg
+      - assets/images/intro1.png
+      - assets/images/intro3.png
+      - assets/images/player1.jpg
+      - assets/images/player2.jpg
+      - assets/images/player3.jpg
+      - assets/images/player4.jpg
+      
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

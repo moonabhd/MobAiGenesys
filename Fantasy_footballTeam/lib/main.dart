@@ -1,3 +1,4 @@
+import 'package:fantasy_football/screens/First.dart';
 import 'package:fantasy_football/screens/main_navigation_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -13,10 +14,10 @@ class FantasyFootballApp extends StatelessWidget {
     return MaterialApp(
       title: "Fantasy Football",
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: Colors.green[50],
+        
+        scaffoldBackgroundColor: Color.fromRGBO(32, 32, 34, 1),//background color 
       ),
-      home: MainNavigationScreen(),
+      home: FirstPage(),
       debugShowCheckedModeBanner: false,
     );
   }

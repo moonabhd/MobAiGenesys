@@ -1,4 +1,8 @@
+import 'package:fantasy_football/screens/First.dart';
+import 'package:fantasy_football/screens/Match.dart';
+import 'package:fantasy_football/screens/Nav.dart';
 import 'package:fantasy_football/screens/home_screen.dart';
+import 'package:fantasy_football/screens/login.dart';
 import 'package:fantasy_football/screens/players_market_screen.dart';
 import 'package:fantasy_football/screens/team_screen.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +18,10 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     HomeScreen(),
     TeamScreen(),
     PlayersMarketScreen(),
+    MatchResults(),
+    CreateAccountPage(),
+    FirstPage(),
+    OnboardingPages(),
   ];
 
   @override
@@ -21,13 +29,15 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     return Scaffold(
       body: _screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Colors.green,
+        unselectedItemColor: Colors.black,
         currentIndex: _selectedIndex,
         onTap: (index) {
           setState(() {
             _selectedIndex = index;
           });
         },
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.sports_soccer),
             label: 'Field View',
@@ -39,6 +49,22 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
             label: 'Market',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.emoji_events), // Icon for MatchResults
+            label: 'Matches',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.emoji_events), // Icon for MatchResults
+            label: 'Matches',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.emoji_events), // Icon for MatchResults
+            label: 'Matches',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.emoji_events), // Icon for MatchResults
+            label: 'Matches',
           ),
         ],
       ),

@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
 class PlayerModel {
   final String id;
   final String name;
@@ -25,31 +28,44 @@ class PlayerModel {
     this.left = 0.0,
   });
 
-  PlayerModel copyWith({
-    String? id,
-    String? name,
-    String? position,
-    String? team,
-    int? points,
-    double? value,
-    String? imageUrl,
-    Map<String, dynamic>? stats,
-    double? top,
-    double? right,
-    double? left,
-  }) {
+  // Factory constructor to create a PlayerModel from a JSON object
+  factory PlayerModel.fromJson(Map<String, dynamic> json) {
     return PlayerModel(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      position: position ?? this.position,
-      team: team ?? this.team,
-      points: points ?? this.points,
-      value: value ?? this.value,
-      imageUrl: imageUrl ?? this.imageUrl,
-      stats: stats ?? this.stats,
-      top: top ?? this.top,
-      right: right ?? this.right,
-      left: left ?? this.left,
+      id: json['id'],
+      name: json['name'],
+      position: json['position'],
+      team: json['team'],
+      points: json['points'],
+      value: json['value'] ?? 0.0,
+      imageUrl: json['imageUrl'] ?? '',
+      stats: json['stats'] ?? {},
+      top: json['top'] ?? 0.0,
+      right: json['right'] ?? 0.0,
+      left: json['left'] ?? 0.0,
     );
+  }
+}
+
+Future<List<PlayerModel>> fetchPlayerList() async {
+  // Replace with your actual API URL
+  final url = Uri.parse('https://api.example.com/players');
+
+  try {
+    // Make the network request
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      // Parse the JSON response
+      List<dynamic> jsonList = json.decode(response.body);
+      
+      // Map JSON list to List<PlayerModel>
+      return jsonList.map((json) => PlayerModel.fromJson(json)).toList();
+    } else {
+      // Handle non-200 responses (error)
+      throw Exception('Failed to load players');
+    }
+  } catch (e) {
+    print('Error fetching players: $e');
+    return [];
   }
 }
