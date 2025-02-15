@@ -46,8 +46,6 @@ class _EntryPointState extends State<EntryPoint> {
         centerTitle: false,
         title: SvgPicture.asset(
           "assets/Illustration/BookLogo.png",
-          colorFilter: ColorFilter.mode(
-              Theme.of(context).iconTheme.color!, BlendMode.srcIn),
           height: 20,
           width: 100,
         ),

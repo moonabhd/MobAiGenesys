@@ -219,7 +219,7 @@ Future<void> _stopListening() async {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
-                    'Booki',
+                    'BIBLIO',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
