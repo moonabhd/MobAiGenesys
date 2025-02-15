@@ -13,9 +13,10 @@ class ProductInfo extends StatelessWidget {
     required this.rating,
     required this.numOfReviews,
     required this.isAvailable,
+    required this.category,
   });
 
-  final String title, brand, description;
+  final String title, brand, description,category;
   final double rating;
   final int numOfReviews;
   final bool isAvailable;
@@ -35,6 +36,11 @@ class ProductInfo extends StatelessWidget {
             const SizedBox(height: defaultPadding / 2),
             Text(
               title,
+              maxLines: 2,
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            Text(
+              category,
               maxLines: 2,
               style: Theme.of(context).textTheme.titleLarge,
             ),

@@ -30,11 +30,12 @@ class ProductDetailsScreen extends StatelessWidget {
     return Scaffold(
       bottomNavigationBar: CartButton(
         price: product.price,
+        book: product,
         press: () {
           customModalBottomSheet(
             context,
             height: MediaQuery.of(context).size.height * 0.92,
-            child: const ProductBuyNowScreen(),
+            child:  ProductBuyNowScreen(book: product),
           );
         },
       ),
@@ -74,6 +75,7 @@ class ProductDetailsScreen extends StatelessWidget {
               description: "A cool book about ${product.title}...",
               rating: 4.4,
               numOfReviews: 126,
+              category: product.category,
             ),
             ProductListTile(
               svgSrc: "assets/icons/Return.svg",

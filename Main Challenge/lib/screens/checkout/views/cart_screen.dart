@@ -42,7 +42,7 @@ class _CartScreenState extends State<CartScreen> {
         child: Column(
           children: [
             // Display cart items dynamically
-            ...cartItems.map((product) => _buildCartItem(product)).toList(),
+            ...cartBooks.map((product) => _buildCartItem(product)).toList(),
             const SizedBox(height: 20),
             const TextField(
               decoration: InputDecoration(

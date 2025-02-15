@@ -172,3 +172,5 @@ List<BookModel> kidsBooks = [
   ),
 ];
 List<BookModel> demoSavedBooks=demoPopularBooks;
+List<BookModel> recentSearchdemo=demoPopularBooks;
+List<BookModel> cartBooks=[demoPopularBooks[0]];

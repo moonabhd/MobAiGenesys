@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shop/route/route_constants.dart';
 import 'dart:convert';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:shop/models/product_model.dart';
+
+
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -26,20 +29,73 @@ class _SearchScreenState extends State<SearchScreen> {
   bool _isListening = false;
   List<BookModel> searchResults = demoPopularBooks;
   List<BookModel> filteredResults = [];
+  List<String> recentSearches = [];
+  static const String _recentSearchesKey = 'recent_searches';
+  static const int _maxRecentSearches = 10;
 
   @override
   void initState() {
     super.initState();
-    filteredResults = searchResults; // Initialize with all products
+    filteredResults = searchResults;
+    _loadRecentSearches();
+  }
+
+  // Load recent searches from SharedPreferences
+  Future<void> _loadRecentSearches() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      recentSearches = prefs.getStringList(_recentSearchesKey) ?? [];
+    });
+  }
+
+  // Save recent searches to SharedPreferences
+  Future<void> _saveRecentSearches() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList(_recentSearchesKey, recentSearches);
+  }
+
+  // Add a search term to recent searches
+  void _addToRecentSearches(String searchTerm) {
+    if (searchTerm.isEmpty) return;
+
+    setState(() {
+      // Remove the search term if it already exists
+      recentSearches.remove(searchTerm);
+      // Add the search term to the beginning of the list
+      recentSearches.insert(0, searchTerm);
+      // Keep only the most recent searches
+      if (recentSearches.length > _maxRecentSearches) {
+        recentSearches = recentSearches.sublist(0, _maxRecentSearches);
+      }
+    });
+    _saveRecentSearches();
+  }
+
+  // Remove a search term from history
+  void _removeFromHistory(String searchTerm) {
+    setState(() {
+      recentSearches.remove(searchTerm);
+    });
+    _saveRecentSearches();
+  }
+
+  // Clear all search history
+  void _clearSearchHistory() {
+    setState(() {
+      recentSearches.clear();
+    });
+    _saveRecentSearches();
   }
 
   Future<void> _filterProducts(String query) async {
     if (query.isEmpty) {
       setState(() {
-        filteredResults = searchResults; // Show all products if query is empty
+        filteredResults = searchResults;
       });
       return;
     }
+
+    _addToRecentSearches(query); // Add to recent searches
 
     const apiUrl = 'http://127.0.0.1:5000/recommend';
 
@@ -58,12 +114,12 @@ class _SearchScreenState extends State<SearchScreen> {
           filteredResults = recommendations
               .map((item) => BookModel.fromJson(item))
               .toList();
+              recentSearchdemo=filteredResults;
         });
       } else {
         throw Exception('Failed to load search results');
       }
     } catch (e) {
-      print('Error: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: $e')),
       );
@@ -71,43 +127,85 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   /// **Handles Speech-to-Text for Vocal Search**
-  Future<void> _startListening() async {
+  // Update these functions in your _SearchScreenState class
+
+Future<void> _startListening() async {
+  try {
     bool available = await _speech.initialize(
       onStatus: (status) {
         print('Speech status: $status');
+        if (status == 'done') {
+          setState(() => _isListening = false);
+        }
       },
-      onError: (error) {
-        print('Speech error: $error');
+      onError: (errorNotification) {
+        print('Speech error: $errorNotification');
+        setState(() => _isListening = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $errorNotification')),
+        );
       },
     );
 
     if (available) {
       setState(() {
         _isListening = true;
+        // Clear the previous text when starting new listening session
+        _searchController.clear();
       });
 
-      _speech.listen(
+      await _speech.listen(
         onResult: (result) {
           setState(() {
             _searchController.text = result.recognizedWords;
+            // If we have a final result, stop listening and perform search
+            if (result.finalResult) {
+              _stopListening();
+            }
           });
         },
+        listenFor: Duration(seconds: 30), // Maximum listening duration
+        pauseFor: Duration(seconds: 3),   // Auto-stop after silence
+        partialResults: true,             // Get interim results
+        cancelOnError: true,
+        listenMode: stt.ListenMode.confirmation,
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Speech recognition not available')),
       );
     }
+  } catch (e) {
+    print('Error initializing speech recognition: $e');
+    setState(() => _isListening = false);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error: $e')),
+    );
   }
+}
 
-  void _stopListening() async {
-    _speech.stop();
+Future<void> _stopListening() async {
+  try {
+    await _speech.stop();
     setState(() {
       _isListening = false;
     });
 
-    // Print the recognized text to the console
-    print('Recognized Text: ${_searchController.text}');
+    final recognizedText = _searchController.text.trim();
+    print('Recognized Text: $recognizedText');
 
-    // Perform the POST request with the recognized text
-    await _filterProducts(_searchController.text);
+    if (recognizedText.isNotEmpty) {
+      // Add to recent searches and perform the search
+      _addToRecentSearches(recognizedText);
+      await _filterProducts(recognizedText);
+    }
+  } catch (e) {
+    print('Error stopping speech recognition: $e');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error stopping recognition: $e')),
+    );
   }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -174,33 +272,115 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  Widget _buildRecentSearches() {
+ Widget _buildRecentSearches() {
+    if (recentSearches.isEmpty) {
+      return const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.history,
+              size: 48,
+              color: Colors.grey,
+            ),
+            SizedBox(height: 16),
+            Text(
+              'No recent searches',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey,
+              ),
+            ),
+            Text(
+              'Your search history will appear here',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.all(16.0),
-          child: const Text(
-            'Recent Searches',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Recent Searches',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              if (recentSearches.isNotEmpty)
+                TextButton.icon(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('Clear Search History'),
+                        content: const Text(
+                          'Are you sure you want to clear your search history?',
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              _clearSearchHistory();
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Clear'),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.delete_outline),
+                  label: const Text('Clear All'),
+                ),
+            ],
           ),
         ),
         Expanded(
           child: ListView.builder(
             itemCount: recentSearches.length,
             itemBuilder: (context, index) {
-              return ListTile(
-                leading: const Icon(Icons.history),
-                title: Text(recentSearches[index]),
-                onTap: () {
-                  setState(() {
-                    _searchController.text = recentSearches[index];
-                  });
-                  _filterProducts(recentSearches[index]);
+              final searchTerm = recentSearches[index];
+              return Dismissible(
+                key: Key(searchTerm),
+                background: Container(
+                  color: Colors.red,
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.only(right: 16),
+                  child: const Icon(
+                    Icons.delete,
+                    color: Colors.white,
+                  ),
+                ),
+                direction: DismissDirection.endToStart,
+                onDismissed: (direction) {
+                  _removeFromHistory(searchTerm);
                 },
+                child: ListTile(
+                  leading: const Icon(Icons.history),
+                  title: Text(searchTerm),
+                  trailing: const Icon(Icons.north_west, size: 16),
+                  onTap: () {
+                    setState(() {
+                      _searchController.text = searchTerm;
+                    });
+                    _filterProducts(searchTerm);
+                  },
+                ),
               );
             },
           ),
