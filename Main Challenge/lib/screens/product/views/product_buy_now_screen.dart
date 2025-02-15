@@ -7,12 +7,10 @@ import 'package:shop/models/product_model.dart';
 import 'package:shop/screens/product/views/added_to_cart_message_screen.dart';
 import 'package:shop/screens/product/views/components/product_list_tile.dart';
 import 'package:shop/screens/product/views/location_permission_store_availability_screen.dart';
-import 'package:shop/screens/product/views/size_guide_screen.dart';
+
 
 import '../../../constants.dart';
 import 'components/product_quantity.dart';
-import 'components/selected_colors.dart';
-import 'components/selected_size.dart';
 import 'components/unit_price.dart';
 
 class ProductBuyNowScreen extends StatefulWidget {

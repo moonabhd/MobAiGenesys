@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:shop/constants.dart';
 import 'package:shop/route/route_constants.dart';
 
 class SignUpScreen extends StatefulWidget {

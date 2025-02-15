@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../constants.dart';
 
 class OnbordingContent extends StatelessWidget {
   const OnbordingContent({

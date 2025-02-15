@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shop/components/buy_full_ui_kit.dart';
 import 'package:shop/constants.dart';
 import 'package:shop/screens/order/orders.dart';
 
