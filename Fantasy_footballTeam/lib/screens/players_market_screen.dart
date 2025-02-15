@@ -35,7 +35,7 @@ class _PlayersMarketScreenState extends State<PlayersMarketScreen> {
     try {
       List<PlayerModel> fetchedPlayers = await fetchPlayersFromApi();
       setState(() {
-        availablePlayers = fetchedPlayers;  // Update the players list
+        availablePlayers = fetchedPlayers; // Update the players list
       });
     } catch (e) {
       print('Error fetching players: $e');
@@ -84,7 +84,19 @@ class _PlayersMarketScreenState extends State<PlayersMarketScreen> {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
-        children: ['All', 'GK', 'RB', 'CB', 'LB', 'CDM', 'CM', 'CAM', 'RW', 'ST', 'LW']
+        children: [
+          'All',
+          'GK',
+          'RB',
+          'CB',
+          'LB',
+          'CDM',
+          'CM',
+          'CAM',
+          'RW',
+          'ST',
+          'LW'
+        ]
             .map((position) => Padding(
                   padding: EdgeInsets.symmetric(horizontal: 4.0),
                   child: FilterChip(
@@ -106,7 +118,7 @@ class _PlayersMarketScreenState extends State<PlayersMarketScreen> {
     final filteredPlayers = availablePlayers.where((player) {
       final matchesSearch =
           player.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          player.team.toLowerCase().contains(_searchQuery.toLowerCase());
+              player.team.toLowerCase().contains(_searchQuery.toLowerCase());
       final matchesPosition =
           _positionFilter == 'All' || player.position == _positionFilter;
       return matchesSearch && matchesPosition;
@@ -127,6 +139,7 @@ class _PlayersMarketScreenState extends State<PlayersMarketScreen> {
             subtitle: Text('${player.team} - ${player.points} pts'),
             trailing: Text('\$${player.value}M'),
             onTap: () {
+              myTeam.add(player);
               if (widget.onPlayerSelected != null) {
                 widget.onPlayerSelected!(player);
                 Navigator.pop(context);
@@ -141,11 +154,15 @@ class _PlayersMarketScreenState extends State<PlayersMarketScreen> {
 
 Future<List<PlayerModel>> fetchPlayersFromApi() async {
   // Replace with your actual API endpoint
-  final response = await http.get(Uri.parse('https://your-api-endpoint.com/players'));
+  final response = await http.get(Uri.parse("http://127.0.0.1:5000/players"));
 
   if (response.statusCode == 200) {
-    List<dynamic> data = json.decode(response.body);
-    return data.map((playerData) => PlayerModel.fromJson(playerData)).toList();
+    final data = jsonDecode(response.body);
+    final List players = data['players'];
+    print(players);
+    return players
+        .map((playerData) => PlayerModel.fromJson(playerData))
+        .toList();
   } else {
     throw Exception('Failed to load players');
   }

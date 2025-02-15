@@ -1,3 +1,4 @@
+import 'package:fantasy_football/screens/create.dart';
 import 'package:flutter/material.dart';
 
 class OnboardingPages extends StatefulWidget {
@@ -13,10 +14,17 @@ class _OnboardingPagesState extends State<OnboardingPages> {
   // A function to move to the next page
   void _nextPage() {
     if (currentPage < 2) {
+      // Move to the next page in the sequence
       _pageController.animateToPage(
         currentPage + 1,
         duration: Duration(milliseconds: 500),
         curve: Curves.easeInOut,
+      );
+    } else {
+      // If on the last page, navigate to the next screen
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LoginScreen()), // Navigate to the next screen
       );
     }
   }

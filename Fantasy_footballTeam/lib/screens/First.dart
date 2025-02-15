@@ -1,3 +1,4 @@
+import 'package:fantasy_football/screens/Nav.dart';
 import 'package:flutter/material.dart';
 import 'package:fantasy_football/screens/main_navigation_screen.dart';
 
@@ -53,7 +54,7 @@ class _FirstPageState extends State<FirstPage> with SingleTickerProviderStateMix
     Future.delayed(Duration(seconds: 5), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => MainNavigationScreen()),
+        MaterialPageRoute(builder: (context) => OnboardingPages()),
       );
     });
   }

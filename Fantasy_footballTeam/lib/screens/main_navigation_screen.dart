@@ -19,9 +19,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     TeamScreen(),
     PlayersMarketScreen(),
     MatchResults(),
-    CreateAccountPage(),
-    FirstPage(),
-    OnboardingPages(),
+  
   ];
 
   @override
@@ -54,18 +52,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             icon: Icon(Icons.emoji_events), // Icon for MatchResults
             label: 'Matches',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.emoji_events), // Icon for MatchResults
-            label: 'Matches',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.emoji_events), // Icon for MatchResults
-            label: 'Matches',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.emoji_events), // Icon for MatchResults
-            label: 'Matches',
-          ),
+     
         ],
       ),
     );

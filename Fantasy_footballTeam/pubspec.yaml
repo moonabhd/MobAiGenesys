@@ -1,6 +1,5 @@
 name: fantasy_football
 description: A Flutter Project For Fantasy Football League.
-author: ESAN OLUWATOMISIN
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -61,6 +60,7 @@ flutter:
       - assets/images/player2.jpg
       - assets/images/player3.jpg
       - assets/images/player4.jpg
+      - assets/images/log.png
       
 
   # An image asset can refer to one or more resolution-specific "variants", see

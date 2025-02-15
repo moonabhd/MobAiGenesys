@@ -8,219 +8,6 @@ class TeamScreen extends StatefulWidget {
 }
 
 class _TeamScreenState extends State<TeamScreen> {
-  List<PlayerModel> myTeam = [
-    PlayerModel(
-      id: '1',
-      name: 'Tom Brady',
-      position: 'QB',
-      team: 'TB',
-      points: 250,
-      value: 9.5,
-      imageUrl: 'assets/images/player1.png',
-      stats: {
-        'Pass Yards': 4500,
-        'Pass TD': 40,
-        'Interceptions': 12,
-      },
-    ),
-    PlayerModel(
-      id: '2',
-      name: 'Derrick Henry',
-      position: 'RB',
-      team: 'TEN',
-      points: 220,
-      value: 9.0,
-      imageUrl: 'assets/images/player2.png',
-      stats: {
-        'Rush Yards': 1500,
-        'Rush TD': 15,
-        'Receptions': 20,
-      },
-    ),
-       PlayerModel(
-      id: '3',
-      name: 'Derrick Henry',
-      position: 'RB',
-      team: 'TEN',
-      points: 220,
-      value: 9.0,
-      imageUrl: 'assets/images/player3.png',
-      stats: {
-        'Rush Yards': 1500,
-        'Rush TD': 15,
-        'Receptions': 20,
-      },
-    ),
-       PlayerModel(
-      id: '4',
-      name: 'Derrick Henry',
-      position: 'RB',
-      team: 'TEN',
-      points: 220,
-      value: 9.0,
-      imageUrl: 'assets/images/player4.png',
-      stats: {
-        'Rush Yards': 1500,
-        'Rush TD': 15,
-        'Receptions': 20,
-      },
-    ),
-       PlayerModel(
-      id: '5',
-      name: 'Derrick Henry',
-      position: 'RB',
-      team: 'TEN',
-      points: 220,
-      value: 9.0,
-      imageUrl: 'assets/images/player2.png',
-      stats: {
-        'Rush Yards': 1500,
-        'Rush TD': 15,
-        'Receptions': 20,
-      },
-    ),
-       PlayerModel(
-      id: '6',
-      name: 'Derrick Henry',
-      position: 'RB',
-      team: 'TEN',
-      points: 220,
-      value: 9.0,
-      imageUrl: 'assets/images/player2.png',
-      stats: {
-        'Rush Yards': 1500,
-        'Rush TD': 15,
-        'Receptions': 20,
-      },
-    ),
-       PlayerModel(
-      id: '7',
-      name: 'Derrick Henry',
-      position: 'RB',
-      team: 'TEN',
-      points: 220,
-      value: 9.0,
-      imageUrl: 'assets/images/player1.png',
-      stats: {
-        'Rush Yards': 1500,
-        'Rush TD': 15,
-        'Receptions': 20,
-      },
-    ),
-       PlayerModel(
-      id: '8',
-      name: 'Derrick Henry',
-      position: 'RB',
-      team: 'TEN',
-      points: 220,
-      value: 9.0,
-      imageUrl: 'assets/images/player3.png',
-      stats: {
-        'Rush Yards': 1500,
-        'Rush TD': 15,
-        'Receptions': 20,
-      },
-    ),
-       PlayerModel(
-      id: '9',
-      name: 'Derrick Henry',
-      position: 'RB',
-      team: 'TEN',
-      points: 220,
-      value: 9.0,
-      imageUrl: 'assets/images/player4.png',
-      stats: {
-        'Rush Yards': 1500,
-        'Rush TD': 15,
-        'Receptions': 20,
-      },
-    ),
-       PlayerModel(
-      id: '10',
-      name: 'Derrick Henry',
-      position: 'RB',
-      team: 'TEN',
-      points: 220,
-      value: 9.0,
-      imageUrl: 'assets/images/player2.jpg',
-      stats: {
-        'Rush Yards': 1500,
-        'Rush TD': 15,
-        'Receptions': 20,
-      },
-    ),
-      PlayerModel(
-      id: '11',
-      name: 'Derrick Henry',
-      position: 'RB',
-      team: 'TEN',
-      points: 220,
-      value: 9.0,
-      imageUrl: 'assets/images/player2.png',
-      stats: {
-        'Rush Yards': 1500,
-        'Rush TD': 15,
-        'Receptions': 20,
-      },
-    ),
-       PlayerModel(
-      id: '2',
-      name: 'Derrick Henry',
-      position: 'RB',
-      team: 'TEN',
-      points: 220,
-      value: 9.0,
-      imageUrl: 'assets/images/player2.png',
-      stats: {
-        'Rush Yards': 1500,
-        'Rush TD': 15,
-        'Receptions': 20,
-      },
-    ),
-       PlayerModel(
-      id: '2',
-      name: 'Derrick Henry',
-      position: 'RB',
-      team: 'TEN',
-      points: 220,
-      value: 9.0,
-      imageUrl: 'assets/images/player2.png',
-      stats: {
-        'Rush Yards': 1500,
-        'Rush TD': 15,
-        'Receptions': 20,
-      },
-    ),
-       PlayerModel(
-      id: '2',
-      name: 'Derrick Henry',
-      position: 'RB',
-      team: 'TEN',
-      points: 220,
-      value: 9.0,
-      imageUrl: 'assets/images/player2.png',
-      stats: {
-        'Rush Yards': 1500,
-        'Rush TD': 15,
-        'Receptions': 20,
-      },
-    ),
-       PlayerModel(
-      id: '2',
-      name: 'Derrick Henry',
-      position: 'RB',
-      team: 'TEN',
-      points: 220,
-      value: 9.0,
-      imageUrl: 'assets/images/player2.png',
-      stats: {
-        'Rush Yards': 1500,
-        'Rush TD': 15,
-        'Receptions': 20,
-      },
-    ),
-    // Add more players to reach 15 if needed
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -233,6 +20,10 @@ class _TeamScreenState extends State<TeamScreen> {
               itemCount: myTeam.length,
               itemBuilder: (context, index) {
                 final player = myTeam[index];
+
+                // Update points for each player before passing it to the card widget
+                player.points = player.calculatePoints();
+
                 return _buildPlayerCard(player);
               },
             ),
@@ -253,7 +44,7 @@ class _TeamScreenState extends State<TeamScreen> {
           }
         },
         child: Icon(Icons.add),
-        backgroundColor:  Color.fromRGBO(61, 147, 19, 100),
+        backgroundColor: Color.fromRGBO(61, 147, 19, 100),
         tooltip: 'Add a new player to your team',
       ),
     );
@@ -323,7 +114,7 @@ class _TeamScreenState extends State<TeamScreen> {
           backgroundImage: AssetImage(player.imageUrl.isNotEmpty
               ? player.imageUrl
               : 'assets/images/player.png'),
-          backgroundColor:  Color.fromRGBO(61, 147, 19, 100),
+          backgroundColor: Color.fromRGBO(61, 147, 19, 100),
           child: Text(
             player.position,
             style: TextStyle(color: Colors.white),
@@ -337,7 +128,7 @@ class _TeamScreenState extends State<TeamScreen> {
         trailing: Text(
           '\$${player.value}M',
           style: TextStyle(
-            color:  Color.fromRGBO(61, 147, 19, 100),
+            color: Color.fromRGBO(61, 147, 19, 100),
           ),
         ),
         children: [
@@ -388,10 +179,17 @@ class _TeamScreenState extends State<TeamScreen> {
       ),
     );
   }
- Widget _buildAddToHomeButton(PlayerModel player) {
+
+  Widget _buildAddToHomeButton(PlayerModel player) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
-     
+      child: ElevatedButton(
+        onPressed: () {
+          // Handle add player to home logic here
+        },
+        child: Text('Add to Home'),
+        style: ElevatedButton.styleFrom(),
+      ),
     );
   }
 }

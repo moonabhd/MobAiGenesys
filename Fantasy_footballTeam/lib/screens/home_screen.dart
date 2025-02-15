@@ -1,6 +1,6 @@
 import 'package:fantasy_football/models/player.dart';
 import 'package:fantasy_football/screens/players_market_screen.dart';
-import 'package:fantasy_football/screens/team_screen.dart';
+
 import 'package:fantasy_football/widgets/player.dart';
 import 'package:flutter/material.dart';
 
@@ -11,13 +11,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   Map<String, PlayerModel> teamPlayers = {};
-  Map<String, PlayerModel> examplePlayers = {};  // Separate state for example players
+  Map<String, PlayerModel> examplePlayers =
+      {}; // Separate state for example players
   double remainingBudget = 100.0; // Example remaining budget
 
   // Example list of 4 positions
-  List<String> examplePlayerPositions = [
-    'GK', 'CB1', 'CB2', 'LB'
-  ];
+  List<String> examplePlayerPositions = ['GK', 'CB1', 'CB2', 'LB'];
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +30,6 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Color.fromRGBO(32, 32, 34, 100),
         elevation: 0.0,
         centerTitle: true,
-       
         leading: IconButton(
           icon: Icon(Icons.menu),
           onPressed: () {},
@@ -163,6 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
+            myTeam.clear();
             teamPlayers.clear();
             examplePlayers.clear(); // Clear example player selections too
           });
@@ -191,7 +190,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return 'assets/images/player.png';
   }
 
-  void _selectPlayer(String position, [double top = 0, double right = 0, double left = 0]) {
+  void _selectPlayer(String position,
+      [double top = 0, double right = 0, double left = 0]) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -204,7 +204,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 right: right,
                 left: left,
               );
-              remainingBudget -= player.value; // Deduct player value from budget
+              remainingBudget -=
+                  player.value; // Deduct player value from budget
             });
           },
         ),
@@ -220,7 +221,8 @@ class _HomeScreenState extends State<HomeScreen> {
           filterPosition: position,
           onPlayerSelected: (PlayerModel player) {
             setState(() {
-              examplePlayers[position] = player; // Store selected player for example position
+              examplePlayers[position] =
+                  player; // Store selected player for example position
             });
           },
         ),

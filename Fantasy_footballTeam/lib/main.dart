@@ -1,9 +1,6 @@
 import 'package:fantasy_football/screens/First.dart';
-import 'package:fantasy_football/screens/main_navigation_screen.dart';
-import 'package:flutter/material.dart';
 
-import 'screens/home_screen.dart';
-import 'screens/players_market_screen.dart';
+import 'package:flutter/material.dart';
 
 
 void main() => runApp(FantasyFootballApp());
