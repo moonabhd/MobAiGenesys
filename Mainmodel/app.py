@@ -23,21 +23,92 @@ def recommend_books(user_input, top_n=5):
     rating_filter = None
     # List of moods with synonyms and common misspellings
     mood_synonyms = {
-        "Fiction": ["novel", "story", "tale", "fction", "ficiton"],
-        "Mystery & Detective": ["mysteries", "crime", "detective", "thriller", "mystry", "deective","kill"],
-        "Fantasy": ["magical", "mythical", "sorcery", "fanatsy", "fentesy","imagination","dream"],
-        "Science Fiction": ["sci-fi", "scifi", "sifi", "sci fi", "futuristic"],
-        "Romance": ["love", "romantic", "relationships", "romanec", "romnce"],
-        "Self-Help": ["self improvement", "personal development", "self growth", "selfhlep", "selp-help"],
-        "Biography & Autobiography": ["life story", "memoir", "bio", "autobio", "biogrphy", "autobigraphy"],
-        "Business & Economics": ["entrepreneurship", "finance", "economy", "bussiness", "busness","financ"],
-        "Psychology": ["mental health", "mind", "psyche", "psycology", "phsychology"],
-        "Thrillers": ["suspense", "action", "adventure", "thriler", "thrllers"],
-        "Cooking": ["recipes", "food", "culinary", "cookbok", "coocking","eat"],
-        "History": ["past", "history", "historical", "ancient", "hstiry", "histroy"],
-        "Sports": ["athletics", "games", "sporting", "sprots", "sporrts", "sport", "spot"],
-        "Technology & Engineering": ["tech", "engineering", "innovation", "techology", "engeneering"]
-    }
+    "Fiction": [
+        "novel", "story", "tale", "narrative", "fable", "parable", "literature", "plot", 
+        "fictional", "make-believe", "prose", "fction", "ficiton", "nobel", "fictian", "fictin",
+        "To Kill a Mockingbird", "The Great Gatsby", "1984", "Pride and Prejudice", "Moby-Dick"
+    ],
+
+    "Mystery & Detective": [
+        "mysteries", "crime", "detective", "thriller", "whodunit", "clue", "investigation", 
+        "suspense", "forensic", "murder", "suspect", "case", "intrigue", "covert", "mystry", "deective", "triller",
+        "Sherlock Holmes", "Gone Girl", "The Girl with the Dragon Tattoo", "Big Little Lies", "The Da Vinci Code"
+    ],
+
+    "Fantasy": [
+        "magical", "mythical", "sorcery", "wizards", "dragons", "elves", "fairy tale", "mythology", 
+        "spell", "enchantment", "realm", "alternate reality", "witchcraft", "fanatsy", "fentesy",
+        "Harry Potter", "The Lord of the Rings", "The Hobbit", "A Game of Thrones", "Percy Jackson"
+    ],
+
+    "Science Fiction": [
+        "sci-fi", "scifi", "sifi", "sci fi", "futuristic", "space", "alien", "robot", "cyberpunk", 
+        "time travel", "parallel universe", "AI", "dystopia", "steampunk", "sciece fiction", "sifi", "scince ficton",
+        "Dune", "The Hitchhiker’s Guide to the Galaxy", "Ender's Game", "Brave New World", "Neuromancer"
+    ],
+
+    "Romance": [
+        "love", "romantic", "relationships", "passion", "affection", "heart", "dating", "soulmate", 
+        "flirtation", "courtship", "proposal", "amour", "romanec", "romnce", "rommance",
+        "Pride and Prejudice", "The Notebook", "Me Before You", "It Ends With Us", "Twilight"
+    ],
+
+    "Self-Help": [
+        "self improvement", "personal development", "self growth", "motivation", "productivity", 
+        "mindset", "goal-setting", "confidence", "positivity", "mental toughness", "success", 
+        "mindfulness", "coaching", "selfhlep", "selp-help", "selp halp", "selfhel",
+        "Atomic Habits", "The 7 Habits of Highly Effective People", "The Power of Now", "The Subtle Art of Not Giving a F*ck"
+    ],
+
+    "Biography & Autobiography": [
+        "life story", "memoir", "bio", "autobio", "historical figure", "legacy", "diary", 
+        "chronicle", "notable", "personal story", "true story", "historical account", "journey",
+        "The Diary of a Young Girl", "Steve Jobs", "Educated", "Becoming", "Long Walk to Freedom"
+    ],
+
+    "Business & Economics": [
+        "entrepreneurship", "finance", "economy", "marketing", "startup", "investment", 
+        "strategy", "corporate", "leadership", "stocks", "wealth", "trade", "bussiness", "busness",
+        "Rich Dad Poor Dad", "The Lean Startup", "The Intelligent Investor", "Zero to One", "Think and Grow Rich"
+    ],
+
+    "Psychology": [
+        "mental health", "mind", "psyche", "cognitive", "subconscious", "therapy", "behavior", 
+        "neuroscience", "emotions", "stress", "depression", "psychoanalysis", "counseling",
+        "Thinking, Fast and Slow", "The Power of Habit", "The Psychopath Test", "Quiet", "The Man Who Mistook His Wife for a Hat"
+    ],
+
+    "Thrillers": [
+        "suspense", "action", "adventure", "intense", "crime", "espionage", "assassin", 
+        "chase", "conspiracy", "danger", "hostage", "spy", "dark", "twist", "gripping", "thriler", "trhiller",
+        "The Girl on the Train", "The Silent Patient", "The Woman in the Window", "Gone Girl", "Before I Go to Sleep"
+    ],
+
+    "Cooking": [
+        "recipes", "food", "culinary", "cookbok", "coocking", "eat", "baking", "chef", 
+        "gourmet", "cuisine", "flavors", "ingredients", "meal prep", "nutrition", "cookbook",
+        "Salt, Fat, Acid, Heat", "The Joy of Cooking", "Mastering the Art of French Cooking", "The Food Lab"
+    ],
+
+    "History": [
+        "past", "history", "historical", "ancient", "civilization", "archaeology", "dynasty", 
+        "war", "heritage", "revolution", "historian", "chronology", "relics", "artifacts",
+        "Sapiens", "Guns, Germs, and Steel", "A People's History of the United States", "The Silk Roads"
+    ],
+
+    "Sports": [
+        "athletics", "games", "sporting", "competition", "fitness", "training", "workout", 
+        "stadium", "championship", "league", "olympics", "tournament", "athlete", "exercise",
+        "Moneyball", "The Boys in the Boat", "Open (Andre Agassi)", "Shoe Dog", "Born to Run"
+    ],
+
+    "Technology & Engineering": [
+        "tech", "engineering", "innovation", "robotics", "automation", "cybersecurity", "AI", 
+        "machine learning", "network", "virtual reality", "computing", "hacking", "invention",
+        "The Innovators", "Hackers & Painters", "Code", "The Singularity is Near", "How to Create a Mind"
+    ]
+}
+
 
     # Check for mood in the input
     for mood, synonyms in mood_synonyms.items():
