@@ -1,8 +1,9 @@
+import 'dart:async'; // Import for Timer
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:shop/components/dot_indicators.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shop/constants.dart';
 import 'package:shop/route/route_constants.dart';
+import 'package:shop/screens/auth/views/welcome.dart';
 
 import 'components/onbording_content.dart';
 
@@ -20,19 +21,52 @@ class _OnBordingScreenState extends State<OnBordingScreen> {
     Onbord(
       image: "assets/Illustration/BookLogo.png",
       imageDarkTheme: "assets/Illustration/BookLogo.png",
-      ),
+    ),
   ];
+  Timer? _timer;
 
   @override
   void initState() {
     _pageController = PageController(initialPage: 0);
+    _startTimer(); // Start the timer for automatic transitions
     super.initState();
   }
 
   @override
   void dispose() {
     _pageController.dispose();
+    _timer?.cancel(); // Cancel the timer when the widget is disposed
     super.dispose();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 2), (timer) {
+      if (_pageIndex < _onbordData.length - 1) {
+        _pageController.nextPage(
+          curve: Curves.ease,
+          duration: defaultDuration,
+        );
+      } else {
+        _navigateToNextScreen();
+      }
+    });
+  }
+
+  void _navigateToNextScreen() {
+    _timer?.cancel(); // Cancel the timer before navigating
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => const WelcomePage(), // Replace with your next screen
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        },
+        transitionDuration: defaultDuration,
+      ),
+    );
   }
 
   @override
@@ -52,46 +86,21 @@ class _OnBordingScreenState extends State<OnBordingScreen> {
                       _pageIndex = value;
                     });
                   },
-                  itemBuilder: (context, index) => OnbordingContent(
-                     image: (Theme.of(context).brightness == Brightness.dark &&
-                            _onbordData[index].imageDarkTheme != null)
-                        ? _onbordData[index].imageDarkTheme!
-                        : _onbordData[index].image,
-                  
-                  ),
+                  itemBuilder: (context, index) {
+                    return AnimatedSwitcher(
+                      duration: defaultDuration,
+                      child: OnbordingContent(
+                        key: ValueKey(index), // Unique key for each page
+                        image: (Theme.of(context).brightness == Brightness.dark &&
+                                _onbordData[index].imageDarkTheme != null)
+                            ? _onbordData[index].imageDarkTheme!
+                            : _onbordData[index].image,
+                      ),
+                    );
+                  },
                 ),
               ),
-              Row(
-                children: [
-                  const Spacer(),
-                  SizedBox(
-                    height: 60,
-                    width: 60,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (_pageIndex < _onbordData.length - 1) {
-                          _pageController.nextPage(
-                              curve: Curves.ease, duration: defaultDuration);
-                        } else {
-                          Navigator.pushNamed(context, welcomePage);
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shape: const CircleBorder(),
-                        backgroundColor: const Color.fromARGB(255, 222, 195, 164)
-                      ),
-                      child: SvgPicture.asset(
-                        "assets/icons/Arrow - Right.svg",
-                        colorFilter: const ColorFilter.mode(
-                           const Color.fromRGBO(59, 47,47, 1),
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: defaultPadding),
+              // Remove the arrow button
             ],
           ),
         ),

@@ -3,9 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shop/components/Banner/M/banner_m_style_1.dart';
 
-import 'package:shop/components/dot_indicators.dart';
-
-import '../../../../constants.dart';
 
 class OffersCarousel extends StatefulWidget {
   const OffersCarousel({

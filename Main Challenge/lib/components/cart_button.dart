@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shop/models/product_model.dart';
 
 import '../constants.dart';
 
@@ -6,14 +7,17 @@ class CartButton extends StatelessWidget {
   const CartButton({
     super.key,
     required this.price,
-    this.title = "Buy Now",
+    this.title = "Add to Cart",
     this.subTitle = "Unit price",
     required this.press,
+    required this.book
   });
 
   final double price;
   final String title, subTitle;
   final VoidCallback press;
+  final int num=1;
+  final BookModel book;
 
   @override
   Widget build(BuildContext context) {
@@ -45,14 +49,14 @@ class CartButton extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "\$${price.toStringAsFixed(2)}",
+                            "\$${book.price.toStringAsFixed(2)}",
                             style: Theme.of(context)
                                 .textTheme
                                 .titleSmall!
                                 .copyWith(color: Colors.white),
                           ),
                           Text(
-                            subTitle,
+                            book.author,
                             style: const TextStyle(
                                 color: Colors.white54,
                                 fontWeight: FontWeight.w500),
@@ -68,7 +72,7 @@ class CartButton extends StatelessWidget {
                       height: double.infinity,
                       color: Colors.black.withOpacity(0.15),
                       child: Text(
-                        title,
+                        "Add to cart",
                         style: Theme.of(context)
                             .textTheme
                             .titleSmall!

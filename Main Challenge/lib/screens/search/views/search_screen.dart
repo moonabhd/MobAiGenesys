@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:shop/components/product/product_card.dart';
-import '../../../../route/route_constants.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shop/route/route_constants.dart';
+import 'dart:convert';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:shop/models/product_model.dart';
-import 'package:shop/route/screen_export.dart';
+
+
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -11,62 +15,197 @@ class SearchScreen extends StatefulWidget {
   State<SearchScreen> createState() => _SearchScreenState();
 }
 
+final List<String> recentSearches = [
+  'Harry Potter',
+  'Hopeless',
+  'Fifty Shades of grey',
+  'It start with us',
+  'It ends with us',
+];
+
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
-  final List<String> recentSearches = [
-    'Harry Potter',
-    'Hopeless',
-    'Fifty Shades of grey',
-    'It start with us',
-    'It ends with us',
-  ];
-
+  final stt.SpeechToText _speech = stt.SpeechToText();
+  bool _isListening = false;
   List<BookModel> searchResults = demoPopularBooks;
   List<BookModel> filteredResults = [];
+  List<String> recentSearches = [];
+  static const String _recentSearchesKey = 'recent_searches';
+  static const int _maxRecentSearches = 10;
 
   @override
   void initState() {
     super.initState();
-    filteredResults = searchResults; // Initialize with all products
+    filteredResults = searchResults;
+    _loadRecentSearches();
   }
 
-  void _filterProducts(String query) {
+  // Load recent searches from SharedPreferences
+  Future<void> _loadRecentSearches() async {
+    final prefs = await SharedPreferences.getInstance();
     setState(() {
-      if (query.isEmpty) {
-        filteredResults = searchResults; // Show all products if query is empty
-      } else {
-        filteredResults = searchResults
-            .where((product) =>
-                product.title.toLowerCase().contains(query.toLowerCase()))
-            .toList();
+      recentSearches = prefs.getStringList(_recentSearchesKey) ?? [];
+    });
+  }
+
+  // Save recent searches to SharedPreferences
+  Future<void> _saveRecentSearches() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList(_recentSearchesKey, recentSearches);
+  }
+
+  // Add a search term to recent searches
+  void _addToRecentSearches(String searchTerm) {
+    if (searchTerm.isEmpty) return;
+
+    setState(() {
+      // Remove the search term if it already exists
+      recentSearches.remove(searchTerm);
+      // Add the search term to the beginning of the list
+      recentSearches.insert(0, searchTerm);
+      // Keep only the most recent searches
+      if (recentSearches.length > _maxRecentSearches) {
+        recentSearches = recentSearches.sublist(0, _maxRecentSearches);
       }
     });
+    _saveRecentSearches();
   }
 
-  void _applyFilters(Map<String, dynamic> filters) {
+  // Remove a search term from history
+  void _removeFromHistory(String searchTerm) {
     setState(() {
-      filteredResults = searchResults.where((product) {
-        // Apply size filter
-        if (filters['author'] != null && filters['author'] != product.author) {
-          return false;
-        }
-        // Apply price filter
-        if (filters['minPrice'] != null &&
-            product.price < filters['minPrice']) {
-          return false;
-        }
-        if (filters['maxPrice'] != null &&
-            product.price > filters['maxPrice']) {
-          return false;
-        }
-        // Apply in-stock filter
-        if (filters['inStock'] == true && !product.inStock) {
-          return false;
-        }
-        return true;
-      }).toList();
+      recentSearches.remove(searchTerm);
     });
+    _saveRecentSearches();
   }
+
+  // Clear all search history
+  void _clearSearchHistory() {
+    setState(() {
+      recentSearches.clear();
+    });
+    _saveRecentSearches();
+  }
+
+  Future<void> _filterProducts(String query) async {
+    if (query.isEmpty) {
+      setState(() {
+        filteredResults = searchResults;
+      });
+      return;
+    }
+
+    _addToRecentSearches(query); // Add to recent searches
+
+    const apiUrl = 'http://127.0.0.1:5000/recommend';
+
+    try {
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'query': query}),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final List recommendations = data['recommendations'];
+
+        setState(() {
+          filteredResults = recommendations
+              .map((item) => BookModel.fromJson(item))
+              .toList();
+              recentSearchdemo=filteredResults;
+        });
+      } else {
+        throw Exception('Failed to load search results');
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
+    }
+  }
+
+  /// **Handles Speech-to-Text for Vocal Search**
+  // Update these functions in your _SearchScreenState class
+
+Future<void> _startListening() async {
+  try {
+    bool available = await _speech.initialize(
+      onStatus: (status) {
+        print('Speech status: $status');
+        if (status == 'done') {
+          setState(() => _isListening = false);
+        }
+      },
+      onError: (errorNotification) {
+        print('Speech error: $errorNotification');
+        setState(() => _isListening = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $errorNotification')),
+        );
+      },
+    );
+
+    if (available) {
+      setState(() {
+        _isListening = true;
+        // Clear the previous text when starting new listening session
+        _searchController.clear();
+      });
+
+      await _speech.listen(
+        onResult: (result) {
+          setState(() {
+            _searchController.text = result.recognizedWords;
+            // If we have a final result, stop listening and perform search
+            if (result.finalResult) {
+              _stopListening();
+            }
+          });
+        },
+        listenFor: Duration(seconds: 30), // Maximum listening duration
+        pauseFor: Duration(seconds: 3),   // Auto-stop after silence
+        partialResults: true,             // Get interim results
+        cancelOnError: true,
+        listenMode: stt.ListenMode.confirmation,
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Speech recognition not available')),
+      );
+    }
+  } catch (e) {
+    print('Error initializing speech recognition: $e');
+    setState(() => _isListening = false);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error: $e')),
+    );
+  }
+}
+
+Future<void> _stopListening() async {
+  try {
+    await _speech.stop();
+    setState(() {
+      _isListening = false;
+    });
+
+    final recognizedText = _searchController.text.trim();
+    print('Recognized Text: $recognizedText');
+
+    if (recognizedText.isNotEmpty) {
+      // Add to recent searches and perform the search
+      _addToRecentSearches(recognizedText);
+      await _filterProducts(recognizedText);
+    }
+  } catch (e) {
+    print('Error stopping speech recognition: $e');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error stopping recognition: $e')),
+    );
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -101,19 +240,16 @@ class _SearchScreenState extends State<SearchScreen> {
                 controller: _searchController,
                 decoration: InputDecoration(
                   hintText: 'Search for products...',
-                  prefixIcon: const Icon(Icons.search),
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.tune),
+                  prefixIcon: IconButton(
+                    icon: const Icon(Icons.search),
                     onPressed: () async {
-                      final filters = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const FilterScreen(),
-                        ),
-                      );
-                      if (filters != null) {
-                        _applyFilters(filters);
-                      }
+                      await _filterProducts(_searchController.text);
+                    },
+                  ),
+                  suffixIcon: IconButton(
+                    icon: Icon(_isListening ? Icons.mic_off : Icons.mic),
+                    onPressed: () {
+                      _isListening ? _stopListening() : _startListening();
                     },
                   ),
                   border: OutlineInputBorder(
@@ -123,9 +259,6 @@ class _SearchScreenState extends State<SearchScreen> {
                   filled: true,
                   fillColor: Colors.grey[100],
                 ),
-                onChanged: (value) {
-                  _filterProducts(value); // Filter products as the user types
-                },
               ),
             ),
             Expanded(
@@ -139,7 +272,37 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  Widget _buildRecentSearches() {
+ Widget _buildRecentSearches() {
+    if (recentSearches.isEmpty) {
+      return const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.history,
+              size: 48,
+              color: Colors.grey,
+            ),
+            SizedBox(height: 16),
+            Text(
+              'No recent searches',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey,
+              ),
+            ),
+            Text(
+              'Your search history will appear here',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -155,13 +318,35 @@ class _SearchScreenState extends State<SearchScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              TextButton(
-                onPressed: () {},
-                child: const Text(
-                  'See All',
-                  style: TextStyle(color: Color(0xFF211613)),
+              if (recentSearches.isNotEmpty)
+                TextButton.icon(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('Clear Search History'),
+                        content: const Text(
+                          'Are you sure you want to clear your search history?',
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              _clearSearchHistory();
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Clear'),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.delete_outline),
+                  label: const Text('Clear All'),
                 ),
-              ),
             ],
           ),
         ),
@@ -169,15 +354,31 @@ class _SearchScreenState extends State<SearchScreen> {
           child: ListView.builder(
             itemCount: recentSearches.length,
             itemBuilder: (context, index) {
-              return ListTile(
-                leading: const Icon(Icons.history),
-                title: Text(recentSearches[index]),
-                trailing: IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: () {
+              final searchTerm = recentSearches[index];
+              return Dismissible(
+                key: Key(searchTerm),
+                background: Container(
+                  color: Colors.red,
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.only(right: 16),
+                  child: const Icon(
+                    Icons.delete,
+                    color: Colors.white,
+                  ),
+                ),
+                direction: DismissDirection.endToStart,
+                onDismissed: (direction) {
+                  _removeFromHistory(searchTerm);
+                },
+                child: ListTile(
+                  leading: const Icon(Icons.history),
+                  title: Text(searchTerm),
+                  trailing: const Icon(Icons.north_west, size: 16),
+                  onTap: () {
                     setState(() {
-                      recentSearches.removeAt(index); // Remove recent search
+                      _searchController.text = searchTerm;
                     });
+                    _filterProducts(searchTerm);
                   },
                 ),
               );
@@ -203,231 +404,49 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         ),
         Expanded(
-          child: GridView.builder(
-            padding: const EdgeInsets.all(16.0),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 0.7,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-            ),
-            itemCount: filteredResults.length,
-            itemBuilder: (context, index) {
-              return ProductCard(
-                image: filteredResults[index].image,
-                brandName: filteredResults[index].author,
-                title: filteredResults[index].title,
-                price: filteredResults[index].price,
-                priceAfetDiscount: filteredResults[index].priceAfterDiscount,
-                dicountpercent: filteredResults[index].discountPercent,
-                press: () {
-                  Navigator.pushNamed(context, productDetailsScreenRoute);
-                },
+          child: ListView(
+            children: filteredResults.map((product) {
+              return Card(
+                child: ListTile(
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      productDetailsScreenRoute,
+                      arguments: product, // Passing the selected book
+                    );
+                  },
+                  leading: Image.network(
+                    product.image,
+                    width: 50,
+                    height: 50,
+                    fit: BoxFit.cover,
+                  ),
+                  title: Text(product.title),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(product.author,
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text(product.category, style: TextStyle(color: Colors.grey)),
+                      Text(product.isbn.toString(),
+                          style: TextStyle(color: Colors.black)),
+                    ],
+                  ),
+                  trailing: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '\$${product.price.toStringAsFixed(2)}',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ),
               );
-            },
+            }).toList(),
           ),
         ),
       ],
-    );
-  }
-}
-
-class FilterScreen extends StatefulWidget {
-  const FilterScreen({super.key});
-
-  @override
-  State<FilterScreen> createState() => _FilterScreenState();
-}
-
-class _FilterScreenState extends State<FilterScreen> {
-  String? selectedSize;
-  double minPrice = 0;
-  double maxPrice = 1000;
-  bool inStock = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text(
-          'Filter',
-          style: TextStyle(color: Colors.black),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              setState(() {
-                selectedSize = null;
-                minPrice = 0;
-                maxPrice = 1000;
-                inStock = false;
-              });
-            },
-            child: const Text(
-              'Clear All',
-              style: TextStyle(color: Color(0xFF211613)),
-            ),
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      final filters = {
-                        'author': selectedSize,
-                        'minPrice': minPrice,
-                        'maxPrice': maxPrice,
-                        'inStock': inStock,
-                      };
-                      Navigator.pop(context, filters); // Return filters
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:const Color(0xFF211613),
-                    ),
-                    child: const Text('Apply Filters'),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          _buildFilterOption('author'),
-          _buildFilterOption('Price'),
-          CheckboxListTile(
-            title: const Text('Available in stock'),
-            value: inStock,
-            onChanged: (value) {
-              setState(() {
-                inStock = value ?? false;
-              });
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFilterOption(String title) {
-    return ListTile(
-      title: Text(title),
-      trailing: const Icon(Icons.chevron_right),
-      onTap: () {
-        if (title == 'author') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const SizeFilterScreen(),
-            ),
-          ).then((value) {
-            if (value != null) {
-              setState(() {
-                selectedSize = value;
-              });
-            }
-          });
-        } else if (title == 'Price') {
-          // Navigate to price filter screen
-        }
-      },
-    );
-  }
-}
-
-class SizeFilterScreen extends StatefulWidget {
-  const SizeFilterScreen({super.key});
-
-  @override
-  State<SizeFilterScreen> createState() => _SizeFilterScreenState();
-}
-
-class _SizeFilterScreenState extends State<SizeFilterScreen> {
-  String? selectedSize;
-
-  final List<Map<String, dynamic>> sizes = [
-    {'author': 'Imen', 'count': 1},
-    {'author': 'Zineb', 'count': 29},
-    {'author': 'Maroua', 'count': 33},
-    {'author': 'Hadj Melab', 'count': 32},
-    {'author': 'Linus', 'count': 27},
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text(
-          'author',
-          style: TextStyle(color: Colors.black),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              setState(() {
-                selectedSize = null;
-              });
-            },
-            child: const Text(
-              'Clear All',
-              style: TextStyle(color: Color(0xFF211613)),
-            ),
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: sizes.length,
-              itemBuilder: (context, index) {
-                final size = sizes[index];
-                return RadioListTile<String>(
-                  title: Text('${size['author']} (${size['count']})'),
-                  value: size['author'],
-                  groupValue: selectedSize,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedSize = value;
-                    });
-                  },
-                );
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context, selectedSize); // Return selected size
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF211613),
-                ),
-                child: const Text('Done'),
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

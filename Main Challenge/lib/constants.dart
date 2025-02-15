@@ -3,12 +3,12 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:google_fonts/google_fonts.dart'; // Import the package
 
 // Just for demo
-const productDemoImg1 = "https://www.baylanguagebooks.co.uk/cdn/shop/products/9789600122855_800x.jpg?v=1733147836";
-const productDemoImg2 = "https://www.baylanguagebooks.co.uk/cdn/shop/products/9789600122855_800x.jpg?v=1733147836";
-const productDemoImg3 = "https://www.baylanguagebooks.co.uk/cdn/shop/products/9789600122855_800x.jpg?v=1733147836";
-const productDemoImg4 = "https://www.baylanguagebooks.co.uk/cdn/shop/products/9789600122855_800x.jpg?v=1733147836";
-const productDemoImg5 = "https://www.baylanguagebooks.co.uk/cdn/shop/products/9789600122855_800x.jpg?v=1733147836";
-const productDemoImg6 = "https://www.baylanguagebooks.co.uk/cdn/shop/products/9789600122855_800x.jpg?v=1733147836";
+const productDemoImg1 = "https://marketplace.canva.com/EAFaQMYuZbo/1/0/1003w/canva-brown-rusty-mystery-novel-book-cover-hG1QhA7BiBU.jpg";
+const productDemoImg2 = "https://marketplace.canva.com/EAFaQMYuZbo/1/0/1003w/canva-brown-rusty-mystery-novel-book-cover-hG1QhA7BiBU.jpg";
+const productDemoImg3 = "https://marketplace.canva.com/EAFaQMYuZbo/1/0/1003w/canva-brown-rusty-mystery-novel-book-cover-hG1QhA7BiBU.jpg";
+const productDemoImg4 = "https://marketplace.canva.com/EAFaQMYuZbo/1/0/1003w/canva-brown-rusty-mystery-novel-book-cover-hG1QhA7BiBU.jpg";
+const productDemoImg5 = "https://marketplace.canva.com/EAFaQMYuZbo/1/0/1003w/canva-brown-rusty-mystery-novel-book-cover-hG1QhA7BiBU.jpg";
+const productDemoImg6 = "https://marketplace.canva.com/EAFaQMYuZbo/1/0/1003w/canva-brown-rusty-mystery-novel-book-cover-hG1QhA7BiBU.jpg";
 
 // End For demo
 

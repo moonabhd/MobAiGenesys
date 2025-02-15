@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shop/components/product/product_card.dart';
-import 'package:shop/constants.dart';
-import 'package:shop/models/category_model.dart';
 import 'package:shop/models/product_model.dart';
 import 'package:shop/route/route_constants.dart';
 import 'package:shop/screens/search/views/components/search_form.dart';
 
-import 'components/expansion_category.dart';
+
 
 class DiscoverScreen extends StatelessWidget {
   const DiscoverScreen({super.key});

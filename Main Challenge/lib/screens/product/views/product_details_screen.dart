@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:shop/components/buy_full_ui_kit.dart';
 import 'package:shop/components/cart_button.dart';
 import 'package:shop/components/custom_modal_bottom_sheet.dart';
-import 'package:shop/components/product/product_card.dart';
 import 'package:shop/constants.dart';
+import 'package:shop/models/product_model.dart';
 import 'package:shop/screens/product/views/product_returns_screen.dart';
 
 import 'package:shop/route/screen_export.dart';
 
-import 'components/notify_me_card.dart';
 import 'components/product_images.dart';
 import 'components/product_info.dart';
 import 'components/product_list_tile.dart';
@@ -17,28 +15,27 @@ import '../../../components/review_card.dart';
 import 'product_buy_now_screen.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
-  const ProductDetailsScreen({super.key, this.isProductAvailable = true});
+  final BookModel product;
+
+  const ProductDetailsScreen({super.key,this.isProductAvailable= true, required this.product});
+
 
   final bool isProductAvailable;
 
-  @override
+ @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: isProductAvailable
-          ? CartButton(
-              price: 140,
-              press: () {
-                customModalBottomSheet(
-                  context,
-                  height: MediaQuery.of(context).size.height * 0.92,
-                  child: const ProductBuyNowScreen(),
-                );
-              },
-            )
-          : NotifyMeCard(
-              isNotify: false,
-              onChanged: (value) {},
-            ),
+      bottomNavigationBar: CartButton(
+        price: product.price,
+        book: product,
+        press: () {
+          customModalBottomSheet(
+            context,
+            height: MediaQuery.of(context).size.height * 0.92,
+            child:  ProductBuyNowScreen(book: product),
+          );
+        },
+      ),
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -46,42 +43,36 @@ class ProductDetailsScreen extends StatelessWidget {
               floating: true,
               actions: [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                     if (demoSavedBooks.contains(product)) {
+      demoSavedBooks.remove(product);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('${product.title} removed from saved books')),
+      );
+    } else {
+      demoSavedBooks.add(product);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('${product.title} added to saved books')),
+      );
+    }
+    
+    // Update UI
+    (context as Element).markNeedsBuild();
+                  },
                   icon: SvgPicture.asset("assets/icons/Bookmark.svg",
-                      color: Colors.white),
+                      color: Colors.black),
                 ),
               ],
             ),
-            const ProductImages(
-              images: [productDemoImg1, productDemoImg2, productDemoImg3],
-            ),
+            ProductImages(images: [product.image]), // Show the book image dynamically
             ProductInfo(
-              brand: "Agatha Christie",
-              title: "It ends with us",
-              isAvailable: isProductAvailable,
-              description:
-                  "A cool book...",
+              brand: product.author,
+              title: product.title,
+              isAvailable: true, 
+              description: "A cool book about ${product.title}...",
               rating: 4.4,
               numOfReviews: 126,
-            ),
-            ProductListTile(
-              svgSrc: "assets/icons/Product.svg",
-              title: "Product Details",
-              press: () {
-                customModalBottomSheet(
-                  context,
-                  height: MediaQuery.of(context).size.height * 0.92,
-                  child: ProductInfo(
-              brand: "Agatha Christie",
-              title: "It ends with us",
-              isAvailable: isProductAvailable,
-              description:
-                  "A cool book...",
-              rating: 4.4,
-              numOfReviews: 126,
-            ),
-                );
-              },
+              category: product.category,
             ),
             ProductListTile(
               svgSrc: "assets/icons/Return.svg",
@@ -126,33 +117,6 @@ class ProductDetailsScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: 220,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 5,
-                  itemBuilder: (context, index) => Padding(
-                    padding: EdgeInsets.only(
-                        left: defaultPadding,
-                        right: index == 4 ? defaultPadding : 0),
-                    child: ProductCard(
-                      image: productDemoImg2,
-                      title: "Hopeless",
-                      brandName: "Agatha christie",
-                      price: 24.65,
-                      priceAfetDiscount: index.isEven ? 20.99 : null,
-                      dicountpercent: index.isEven ? 25 : null,
-                      press: () { Navigator.pushNamed(context, productDetailsScreenRoute,
-                      arguments: index.isEven);},
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SliverToBoxAdapter(
-              child: SizedBox(height: defaultPadding),
-            )
           ],
         ),
       ),

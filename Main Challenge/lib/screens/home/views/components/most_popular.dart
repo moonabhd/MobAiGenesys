@@ -17,44 +17,45 @@ class MostPopular extends StatelessWidget {
       children: [
         const SizedBox(height: defaultPadding / 2),
         const Padding(
-          padding:  EdgeInsets.all(defaultPadding),
-          child:  Center(
-  child: Text(
-    "Most Popular Books",
-    style: TextStyle(
-      fontSize: 20, // Increase font size
-      fontWeight: FontWeight.bold, // Make text bolder
-      color: Colors.white, // Text color
-    ),
-    textAlign: TextAlign.center, // Ensure text is centered
-  ),
-),
+        padding: const EdgeInsets.symmetric(vertical: 10), // Adds vertical padding
+        child: const Center(
+          child: Text(
+            "Recommended Books",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 30, 
+              fontWeight: FontWeight.bold, // Make it bold
+              color: purpleColor, // Change text color
+              
+            ),
+          ),
         ),
+      ),    
         // While loading use 👇
         // SeconderyProductsSkelton(),
         SizedBox(
           height: 300,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            // Find demoPopularBooks on models/ProductModel.dart
-            itemCount: demoPopularBooks.length,
+            // Find recentSearchdemo on models/ProductModel.dart
+            itemCount: recentSearchdemo.length,
             itemBuilder: (context, index) => Padding(
               padding: EdgeInsets.only(
                 left: defaultPadding,
-                right: index == demoPopularBooks.length - 1
+                right: index == recentSearchdemo.length - 1
                     ? defaultPadding
                     : 0,
               ),
               child: SecondaryProductCard(
-                image: demoPopularBooks[index].image,
-                brandName: demoPopularBooks[index].author,
-                title: demoPopularBooks[index].title,
-                price: demoPopularBooks[index].price,
-                priceAfetDiscount: demoPopularBooks[index].priceAfterDiscount,
-                dicountpercent: demoPopularBooks[index].discountPercent,
+                image: recentSearchdemo[index].image,
+                brandName: recentSearchdemo[index].author,
+                title: recentSearchdemo[index].title,
+                price: recentSearchdemo[index].price,
+                priceAfetDiscount: recentSearchdemo[index].priceAfterDiscount,
+                dicountpercent: recentSearchdemo[index].discountPercent,
                 press: () {
                   Navigator.pushNamed(context, productDetailsScreenRoute,
-                      arguments: index.isEven);
+                      arguments: recentSearchdemo[index]);
                 },
               ),
             ),

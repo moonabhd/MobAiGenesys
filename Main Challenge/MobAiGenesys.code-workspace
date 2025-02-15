@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "MobAiGenesys",
+			"path": ".."
+		},
+		{
+			"name": "Fantasy_footballTeam",
+			"path": "../../Fantasy_footballTeam"
+		}
+	],
+	"settings": {}
+}

@@ -3,25 +3,30 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shop/components/cart_button.dart';
 import 'package:shop/components/custom_modal_bottom_sheet.dart';
 import 'package:shop/components/network_image_with_loader.dart';
+import 'package:shop/models/product_model.dart';
 import 'package:shop/screens/product/views/added_to_cart_message_screen.dart';
 import 'package:shop/screens/product/views/components/product_list_tile.dart';
 import 'package:shop/screens/product/views/location_permission_store_availability_screen.dart';
-import 'package:shop/screens/product/views/size_guide_screen.dart';
+
 
 import '../../../constants.dart';
 import 'components/product_quantity.dart';
-import 'components/selected_colors.dart';
-import 'components/selected_size.dart';
 import 'components/unit_price.dart';
 
 class ProductBuyNowScreen extends StatefulWidget {
-  const ProductBuyNowScreen({super.key});
+  final BookModel book;
+ const ProductBuyNowScreen({
+    Key? key,
+    required this.book,
+  }) : super(key: key);
 
   @override
   _ProductBuyNowScreenState createState() => _ProductBuyNowScreenState();
 }
 
 class _ProductBuyNowScreenState extends State<ProductBuyNowScreen> {
+ 
+  static int num=2;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +34,9 @@ class _ProductBuyNowScreenState extends State<ProductBuyNowScreen> {
         price: 269.4,
         title: "Add to cart",
         subTitle: "Total price",
+        book: widget.book,
         press: () {
+          cartBooks.add(widget.book);
           customModalBottomSheet(
             context,
             isDismissible: false,
@@ -83,9 +90,9 @@ class _ProductBuyNowScreenState extends State<ProductBuyNowScreen> {
                           ),
                         ),
                         ProductQuantity(
-                          numOfItem: 2,
-                          onIncrement: () {},
-                          onDecrement: () {},
+                          numOfItem: num,
+                          onIncrement: () {num=num+1;},
+                          onDecrement: () {num=num==1?1:num-1;},
                         ),
                       ],
                     ),

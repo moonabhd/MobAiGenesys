@@ -21,6 +21,9 @@ dependencies:
   flutter_widget_from_html_core: ^0.15.1
   animations: ^2.0.11
   url_launcher: ^6.3.0
+  http: ^1.0.0
+  speech_to_text: ^7.0.0
+  shared_preferences: ^2.2.0
 
 dev_dependencies:
   flutter_test:
@@ -32,12 +35,9 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/
     - assets/icons/
     - assets/Illustration/
     - assets/flags/
-    - assets/logo/
-    - assets/screens/
 
   fonts:
     - family: Plus Jakarta

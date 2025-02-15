@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shop/models/product_model.dart';
 import 'package:shop/route/route_constants.dart';
-import 'package:shop/screens/home/views/components/popular_products.dart';
 import '../../../../constants.dart';
 
 class CategoryModel {
